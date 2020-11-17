@@ -9,7 +9,7 @@ import com.nomadworks.example.testdeeplink.MainActivity
 import com.nomadworks.example.testdeeplink.subscreens.FirstScreenActivity
 import com.nomadworks.example.testdeeplink.subscreens.SecondScreenActivity
 
-object DeepLinkHandler {
+object DeepLinkProcessor {
     // Without backstack - backbutton just exits the app
     @JvmStatic
     @DeepLink("$SCHEME://$HOST/$SCREEN1")
