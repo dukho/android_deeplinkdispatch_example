@@ -3,10 +3,8 @@ package com.nomadworks.example.testdeeplink.notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
-import android.media.AudioAttributes
 import android.net.Uri
 import android.os.Build
 import androidx.core.app.NotificationCompat
@@ -33,27 +31,36 @@ class NotificationHelperImpl(private val appContext: Context) : NotificationHelp
             }
 
             val notificationManager: NotificationManager =
-                appContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                    appContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
     }
 
-    override fun showAssistanceRequired(title: String, content: String) {
-        val intent = Intent(appContext, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
+    override fun showAssistanceRequired(title: String, content: String, deeplink: String?) {
+        val intent =
+                if (deeplink == null) {
+                    Intent(appContext, MainActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
+                } else {
+                    Intent(Intent.ACTION_VIEW, Uri.parse(deeplink)).apply {
+                        flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
+                }
+
+
         val pendingIntent: PendingIntent = PendingIntent.getActivity(appContext, 0, intent, 0)
         var builder = NotificationCompat.Builder(
-            appContext,
-            CHANNEL_ID
+                appContext,
+                CHANNEL_ID
         )
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle(title)
-            .setContentText(content)
-            .setContentIntent(pendingIntent)
-            .setPriority(NotificationCompat.PRIORITY_MAX)
-            .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
-            .setAutoCancel(true)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle(title)
+                .setContentText(content)
+                .setContentIntent(pendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
+                .setAutoCancel(true)
 
         with(NotificationManagerCompat.from(appContext)) {
             notify(NOTIFICATION_ID, builder.build())

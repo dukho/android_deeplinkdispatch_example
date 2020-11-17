@@ -3,15 +3,23 @@
     package="com.nomadworks.example.testdeeplink">
 
     <application
+        android:name=".MainApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.TestDeeplink"
-        android:name=".MainApplication"
-        >
-        <activity android:name=".subscreens.SecondScreenActivity"></activity>
+        android:theme="@style/Theme.TestDeeplink">
+        <activity android:name=".deeplink.DeepLinkActivityActivity"
+            android:theme="@android:style/Theme.NoDisplay">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="com.nomadworks.example" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".subscreens.SecondScreenActivity" />
         <activity android:name=".subscreens.FirstScreenActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
